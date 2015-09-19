@@ -1,2 +1,0 @@
-class RequestSender
-end
