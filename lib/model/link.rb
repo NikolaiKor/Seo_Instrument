@@ -15,4 +15,8 @@ class Link
         "data"         => {"url" => @url, "name" => @name, "rel" => @rel, "target" => @target }
     }.to_json(*a)
   end
+
+  def self.json_create(o)
+    new(o["data"]["name"], o["data"]["url"], o["data"]["rel"], o["data"]["target"])
+  end
 end

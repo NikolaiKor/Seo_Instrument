@@ -4,7 +4,7 @@ class SiteInfo
   attr_reader :headers, :links, :ip, :country, :url, :domain, :date
   attr_accessor :title
 
-  def initialize(url, headers, ip, country, domain)
+  def initialize(url, headers, ip, country, domain, date)
     @url = url
     @title = ''
     @headers = headers
@@ -12,7 +12,7 @@ class SiteInfo
     @ip = ip
     @country = country
     @domain = domain
-    @date = Time.now.strftime("%d.%m.%Y %H:%M:%S")
+    @date = date
   end
 
   def add_link(name, url, rel, target)
@@ -25,6 +25,13 @@ class SiteInfo
         "json_class"   => self.class.name,
         "data"         => {"url" => @url, "title" => @title, "headers" => @headers, "links" => @links, "ip" => @ip, "country" => @country, "domain" => @domain, "date" => @date }
     }.to_json(*a)
+  end
+
+  def self.json_create(o)
+    _res = new(o["data"]["url"], o["data"]["headers"], o["data"]["ip"], o["data"]["country"], o["data"]["domain"], o["data"]["date"])
+    o["data"]["links"].each {|link| _res.add_link(link.name, link.url, link.rel, link.target)}
+    _res.title = o["data"]["title"]
+    _res
   end
 
 end

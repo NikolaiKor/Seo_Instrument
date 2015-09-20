@@ -15,7 +15,7 @@ class RequestWorker
     _geo =GeoIP.new(GEO_IP_FILE).country(_domain_name)
     _headers = Hash.new()
     _response.headers.each { |key, value| _headers[key] = value }
-    _info = SiteInfo.new(_url_copy, _headers, _geo.ip, _geo.country_name, _domain_name)
+    _info = SiteInfo.new(_url_copy, _headers, _geo.ip, _geo.country_name, _domain_name, Time.now.strftime("%d.%m.%Y %H:%M:%S"))
     parse_links(_response.body, _info)
     set_title(_response.body, _info)
     _info
