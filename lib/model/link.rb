@@ -8,4 +8,11 @@ class Link
     rel.nil? ?  @rel = '' : @rel = rel
     target.nil? ? @target = '' : @target = target
   end
+
+  def to_json(*a)
+    {
+        "json_class"   => self.class.name,
+        "data"         => {"url" => @url, "name" => @name, "rel" => @rel, "target" => @target }
+    }.to_json(*a)
+  end
 end

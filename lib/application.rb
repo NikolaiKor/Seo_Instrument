@@ -2,6 +2,9 @@
 require 'sinatra'
 require_relative 'controler/request_worker'
 require_relative 'controler/files_manager'
+require 'json'
+require 'yaml'
+
 module App
   class Application < Sinatra::Application
     set :public_folder, './public'
@@ -16,6 +19,7 @@ module App
     end
 
     get '/reports' do
+
       slim :report
     end
 
@@ -31,6 +35,7 @@ module App
       _file_info = Slim::Template.new('./views/report.slim', encoding: 'utf-8').render(_info)
       _files_manager = FilesManager.new
       _files_manager.save_file(_file_info,"#{_info.domain}_#{_info.date}")
+      print _info.to_json
       _file_info
     end
   end

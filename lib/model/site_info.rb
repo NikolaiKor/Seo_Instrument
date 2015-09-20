@@ -20,4 +20,11 @@ class SiteInfo
     @links << _link #unless name == '' && (url == nil || url == '') && rel == nil && target == nil
   end
 
+  def to_json(*a)
+    {
+        "json_class"   => self.class.name,
+        "data"         => {"url" => @url, "title" => @title, "headers" => @headers, "links" => @links, "ip" => @ip, "country" => @country, "domain" => @domain, "date" => @date }
+    }.to_json(*a)
+  end
+
 end

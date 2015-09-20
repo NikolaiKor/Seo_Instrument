@@ -9,6 +9,7 @@ gem 'slim'
 gem 'geoip'
 gem 'nokogiri', '~>1.6.6.2'
 gem 'httparty'
+gem 'json'
 
 group :test do
   #gem 'rspec', '~> 2.7.0'
