@@ -16,7 +16,8 @@ class RequestWorker
     _headers = Hash.new()
     _response.headers.each { |key, value| _headers[key] = value }
     _info = SiteInfo.new(_url_copy, _headers, _geo.ip, _geo.country_name, _domain_name)
-    parse_links _response.body, _info
+    parse_links(_response.body, _info)
+    set_title(_response.body, _info)
     _info
   end
 
@@ -48,5 +49,10 @@ class RequestWorker
     _links = _doc.css('a')
     _links.each { |link| info.add_link(link.text, link['href'],
                                        link['rel'], link['target']) } unless _links.nil?
+  end
+
+  def set_title(body, info)
+    _doc = Nokogiri::HTML(body)
+    info.title = _doc.css('title').text
   end
 end
