@@ -1,0 +1,30 @@
+doctype 5
+html
+  head
+    link href="/css//bootstrap.min.css" rel="stylesheet"
+    link href="/css/bootstrap-theme.min.css" rel="stylesheet"
+    link href="/css/my_style.css" rel="stylesheet"
+  body
+    .wrap_result_table
+      .search_form
+        .content_search
+          form action="/link" method="POST"
+            input type="text" name="url" placeholder ="Enter url"
+            button class="btn btn-lg btn-success" type="submit" Run
+      .result_table
+        div class = "panel panel-success"
+          div class = "panel-heading"
+            h3 class = "panel-title" Reports history
+          table class = "table table-striped"
+            thead
+              tr
+                th Site url
+                th Created at
+                th Actions
+            tbody
+              -unless self[0] == 0
+                -self[1].each do |item|
+                  tr
+                    td: a href="http://#{item.url}" =item.url
+                    td =item.time
+                    td: a href="#{item.view}" View

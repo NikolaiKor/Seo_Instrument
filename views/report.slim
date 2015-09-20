@@ -1,0 +1,61 @@
+doctype 5
+html
+  head
+    link href="/css//bootstrap.min.css" rel="stylesheet"
+    link href="/css/bootstrap-theme.min.css" rel="stylesheet"
+    link href="/css/my_style.css" rel="stylesheet"
+  body
+    .wrap
+      h1: p
+        'Report for
+        a href="#{@url}" =@url
+      br
+      .date
+        |Date:
+        =date
+      br
+      div class = "panel panel-success"
+        div class = "panel-heading"
+          h3 class = "panel-title" Response headers
+        table class = "table table-striped"
+          tr
+            th Name
+            th Value
+          -headers.each do |key, value|
+            tr
+              td =key
+              td =value
+      br
+
+      div class = "panel panel-success"
+        div class = "panel-heading"
+          h3 class = "panel-title" Page links
+        table class = "table table-striped"
+          thead
+            tr
+              th Name
+              th URL
+              th Rel
+              th Target
+          tbody
+            -links.each do |item|
+              tr
+                td =item.name
+                td: a href="#{item.url}" =item.url
+                td =item.rel
+                td =item.target
+      br
+
+      div class = "panel panel-success"
+        div class = "panel-heading"
+          h3 class = "panel-title" Other information
+        table class = "table table-striped"
+          tr
+            th Name
+            th Value
+          tr
+            td IP
+            td =ip
+          tr
+            td Country
+            td =country

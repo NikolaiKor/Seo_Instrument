@@ -1,3 +1,5 @@
-require ::File.expand_path('../config/environment',  __FILE__)
+#require ::File.expand_path('../config/environment',  __FILE__)
+require './lib/application'
+require 'slim'
 
-run Lesson1::Application
+run App::Application

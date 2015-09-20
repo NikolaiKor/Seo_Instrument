@@ -1,0 +1,24 @@
+.wrap {
+    margin: 5%;
+    margin-top: 2%;
+}
+
+.wrap_result_table {
+    margin: 10%;
+}
+
+.search_form {
+    margin: auto;
+    text-align: center;
+    padding-bottom: 50px;
+    padding-left: 100px;
+}
+
+.content_search{
+    width: 400px;
+}
+
+td {
+    max-width: 250px;
+}
+
