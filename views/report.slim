@@ -8,14 +8,14 @@ html
     .wrap
       h1: p
         'Report for
-        a href="#{@url}" =@url
+        a href="#{res.url}" =res.url
       br
       .date
         'Date:
-        =date
+        =res.date
         br
         'Title:
-        =title
+        =res.title
       div class = "panel panel-success"
         div class = "panel-heading"
           h3 class = "panel-title" Response headers
@@ -23,7 +23,7 @@ html
           tr
             th Name
             th Value
-          -headers.each do |key, value|
+          -res.headers.each do |key, value|
             tr
               td =key
               td =value
@@ -40,7 +40,7 @@ html
               th Rel
               th Target
           tbody
-            -links.each do |item|
+            -res.links.each do |item|
               tr
                 td =item.name
                 td: a href="#{item.url}" =item.url
@@ -57,7 +57,7 @@ html
             th Value
           tr
             td IP
-            td =ip
+            td =res.ip
           tr
             td Country
-            td =country
+            td =res.country

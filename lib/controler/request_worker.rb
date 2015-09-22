@@ -18,6 +18,7 @@ class RequestWorker
     _info = SiteInfo.new(_url_copy, _headers, _geo.ip, _geo.country_name, _domain_name, Time.now.strftime("%d.%m.%Y %H:%M:%S"))
     parse_links(_response.body, _info)
     set_title(_response.body, _info)
+    FilesManager.new.save_file(_info,"#{_info.domain}_#{_info.date}")
     _info
   end
 

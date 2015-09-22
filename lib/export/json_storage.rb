@@ -1,13 +1,12 @@
+require_relative 'abstract_storage'
 require_relative '../model/result_list'
-class FilesManager
+
+class JsonStorage < AbstractStorage
+  TYPE = 'json'
   BASE_DIR = './public/reports/'
   FILE_FORMAT = '.json'
 
-  def save_file(file_info, file_save_name)
-    File.open(BASE_DIR + file_save_name + FILE_FORMAT, 'w') { |f| f.write(file_info.to_json) }
-  end
-
-  def dir_contents
+  def all_reports
     _files_info = []
     Dir.foreach(BASE_DIR) do |filename|
       unless filename=='.' || filename=='..'
@@ -16,10 +15,14 @@ class FilesManager
         _files_info << ResultList.new(_url, _time, filename)
       end
     end
-    {res_length:_files_info.length, res:_files_info}
+    _files_info
   end
 
-  def get_json(file_name)
+  def add_report(info)
+    File.open(BASE_DIR + "#{info.domain}_#{info.date}" + FILE_FORMAT, 'w') { |f| f.write(info.to_json) }
+  end
+
+  def find_report(file_name)
     File.open(BASE_DIR + file_name, 'r') { |f| f.read }
   end
 end

@@ -22,8 +22,8 @@ html
                 th Created at
                 th Actions
             tbody
-              -unless self[0] == 0
-                -self[1].each do |item|
+              -unless res_length == 0
+                -res.each do |item|
                   tr
                     td: a href="http://#{item.url}" =item.url
                     td =item.time

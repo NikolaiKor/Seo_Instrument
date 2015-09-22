@@ -13,6 +13,7 @@ class SiteInfo
     @country = country
     @domain = domain
     @date = date
+    @identifier =''
   end
 
   def add_link(name, url, rel, target)
