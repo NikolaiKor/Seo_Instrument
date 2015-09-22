@@ -11,11 +11,11 @@ module App
     set :slim, default_encoding:'utf-8'
 
     get '/' do
-      slim :index, locals: FilesManager.new.dir_contents
+      slim :index, locals: RequestWorker.new.get_reports_list
     end
 
     get '/report' do
-      slim :report, locals: {res: JSON.load(FilesManager.new.get_json(@params['file']))}
+      slim :report, locals: {res: RequestWorker.new.get_report(@params['file'])}
     end
 
     post '/link' do

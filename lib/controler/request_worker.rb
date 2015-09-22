@@ -4,6 +4,7 @@ require 'nokogiri'
 require 'httparty'
 require_relative '../model/site_info'
 require_relative '../model/link'
+require_relative '../../lib/export/storage_factory'
 #Send Get request to url, and parse it
 class RequestWorker
   GEO_IP_FILE = './lib/controler/GeoIP.dat'
@@ -18,8 +19,16 @@ class RequestWorker
     _info = SiteInfo.new(_url_copy, _headers, _geo.ip, _geo.country_name, _domain_name, Time.now.strftime("%d.%m.%Y %H:%M:%S"))
     parse_links(_response.body, _info)
     set_title(_response.body, _info)
-    FilesManager.new.save_file(_info,"#{_info.domain}_#{_info.date}")
+    StorageFactory.new.get_connector.add_report(_info)
     _info
+  end
+
+  def get_reports_list
+    StorageFactory.new.get_connector.all_reports
+  end
+
+  def get_report(file_id)
+    StorageFactory.new.get_connector.find_report(file_id)
   end
 
   private

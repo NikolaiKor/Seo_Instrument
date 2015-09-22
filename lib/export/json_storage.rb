@@ -15,7 +15,7 @@ class JsonStorage < AbstractStorage
         _files_info << ResultList.new(_url, _time, filename)
       end
     end
-    _files_info
+    {res_length:_files_info.length, res:_files_info}
   end
 
   def add_report(info)
@@ -23,6 +23,6 @@ class JsonStorage < AbstractStorage
   end
 
   def find_report(file_name)
-    File.open(BASE_DIR + file_name, 'r') { |f| f.read }
+    File.open(BASE_DIR + file_name, 'r') { |f| JSON.load(f.read) }
   end
 end
