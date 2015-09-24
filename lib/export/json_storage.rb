@@ -19,7 +19,16 @@ class JsonStorage < AbstractStorage
   end
 
   def add_report(info)
-    File.open(BASE_DIR + "#{info.domain}_#{info.date}" + FILE_FORMAT, 'w') { |f| f.write(info.to_json) }
+    File.open(BASE_DIR + "#{domain_name(info.url)}_#{info.date}" + FILE_FORMAT, 'w') { |f| f.write(info.to_json) }
+  end
+
+  def domain_name(url)
+    _url_copy = url
+    _position = _url_copy.index('//')
+    _url_copy[0, _position+2] = '' if _position
+    _position = _url_copy.index('/')
+    _url_copy = _url_copy[0, _position] if _position
+    _url_copy
   end
 
   def find_report(file_name)

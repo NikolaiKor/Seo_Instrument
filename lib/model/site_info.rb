@@ -2,16 +2,15 @@ require_relative 'link'
 #Include all info about site: url, headers, ip, country, hyperlinks.
 class SiteInfo
   attr_reader :headers, :links, :ip, :country, :url, :domain, :date
-  attr_accessor :title
+  attr_accessor :title, :identifier
 
-  def initialize(url, headers, ip, country, domain, date)
+  def initialize(url, headers, ip, country, date)
     @url = url
     @title = ''
     @headers = headers
     @links = []
     @ip = ip
     @country = country
-    @domain = domain
     @date = date
     @identifier =''
   end
@@ -29,7 +28,7 @@ class SiteInfo
   end
 
   def self.json_create(o)
-    _res = new(o["data"]["url"], o["data"]["headers"], o["data"]["ip"], o["data"]["country"], o["data"]["domain"], o["data"]["date"])
+    _res = new(o["data"]["url"], o["data"]["headers"], o["data"]["ip"], o["data"]["country"], o["data"]["date"])
     o["data"]["links"].each {|link| _res.add_link(link.name, link.url, link.rel, link.target)}
     _res.title = o["data"]["title"]
     _res
