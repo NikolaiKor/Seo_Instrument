@@ -1,0 +1,2 @@
+class DataMapperStorage
+end
