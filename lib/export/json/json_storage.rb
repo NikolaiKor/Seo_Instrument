@@ -1,5 +1,5 @@
-require_relative 'abstract_storage'
-require_relative '../model/result_list'
+require_relative '../abstract_storage'
+require_relative '../../model/result_list'
 
 class JsonStorage < AbstractStorage
   TYPE = 'json'

@@ -1,7 +1,7 @@
 require 'data_mapper'
 class LinkRow
   include DataMapper::Resource
-  storage_names[:legacy] = 'link'
+  storage_names[:default] = 'links'
 
   property :name, String
   property :url, String

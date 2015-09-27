@@ -11,6 +11,9 @@ gem 'nokogiri', '~>1.6.6.2'
 gem 'httparty'
 gem 'json'
 gem 'pg'
+gem 'datamapper'
+gem 'dm-postgres-adapter'
+gem 'warden'
 
 group :test do
   #gem 'rspec', '~> 2.7.0'
