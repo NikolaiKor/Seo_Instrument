@@ -1,0 +1,29 @@
+doctype 5
+html
+  head
+    title Seo Instrument
+    link href="/css//bootstrap.min.css" rel="stylesheet"
+    -unless @slim_link.nil?
+      -@slim_link.each { |href|  "link href=\"#{href}\" rel=\"stylesheet\"" }
+    link href="/css/bootstrap-theme.min.css" rel="stylesheet"
+    link href="/css/my_style.css" rel="stylesheet"
+  body
+    nav.navbar.navbar-default
+      .container-fluid
+        .navbar-header
+          button.navbar-toggle.collapsed aria-controls="navbar" aria-expanded="false" data-target="#navbar" data-toggle="collapse" type="button"
+            span.sr-only Toggle navigation
+            span.icon-bar
+            span.icon-bar
+            span.icon-bar
+          a.navbar-brand href="/"  Seo Instrument
+        #navbar.navbar-collapse.collapse
+          ul.nav.navbar-nav
+            li class="#{@slim_classes[:home_class]}"
+              a href="/"  Home
+            li class="#{@slim_classes[:login_class]}"
+              a href="/auth/login"  Login
+            li class="#{@slim_classes[:contact_class]}"
+              a href="#"  Contact
+    .jumbotron
+      == yield

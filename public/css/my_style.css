@@ -1,10 +1,11 @@
 .wrap {
     margin: 5%;
-    margin-top: 2%;
+    margin-top: 0px;
 }
 
 .wrap_result_table {
     margin: 10%;
+    margin-top: 0px;
 }
 
 .search_form {
