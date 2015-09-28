@@ -10,8 +10,18 @@ module App
     set :public_folder, './public'
     set :views, './views'
     set :slim, default_encoding:'utf-8'
+    set :slim, :layout=> :main_layout
+
+    before do
+      @slim_link = nil
+      @slim_classes = Hash.new
+      @slim_classes[:home_class] = ''
+      @slim_classes[:login_class] = ''
+      @slim_classes[:contact_class] = ''
+    end
 
     get '/' do
+      @slim_classes[:home_class] = 'active'
       slim :index, locals: RequestWorker.new.get_reports_list
     end
 
@@ -19,11 +29,18 @@ module App
       slim :report, locals: {res: RequestWorker.new.get_report(@params['file'])}
     end
 
+    get "/nav" do
+      slim :nav
+    end
+
     post '/link' do
       slim :report, locals: {res: RequestWorker.new.get_info(@params['url'])}
     end
 
     get '/auth/login' do
+      @slim_classes[:login_class] = 'active'
+      #@slim_link = []
+      #@slim_link << "/css//signin.css"
       slim :login
     end
 
@@ -45,7 +62,7 @@ module App
       end
     end
 
-    get '/auth/logout' do
+    post '/auth/logout' do
       env['warden'].raw_session.inspect
       env['warden'].logout
       redirect '/'

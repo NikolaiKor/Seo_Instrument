@@ -1,30 +1,23 @@
-doctype 5
-html
-  head
-    link href="/css//bootstrap.min.css" rel="stylesheet"
-    link href="/css/bootstrap-theme.min.css" rel="stylesheet"
-    link href="/css/my_style.css" rel="stylesheet"
-  body
-    .wrap_result_table
-      .search_form
-        .content_search
-          form action="/link" method="POST"
-            input type="text" name="url" placeholder ="Enter url"
-            button class="btn btn-lg btn-success" type="submit" Run
-      .result_table
-        div class = "panel panel-success"
-          div class = "panel-heading"
-            h3 class = "panel-title" Reports history
-          table class = "table table-striped"
-            thead
+.wrap_result_table
+  .search_form
+    .content_search
+      form action="/link" method="POST"
+        input type="text" name="url" placeholder ="Enter url"
+        button.btn.btn-lg.btn-success type="submit" Run
+  .result_table
+    div.panel.panel-success
+      .panel-heading
+        h3.panel-title Reports history
+      table.table.table-striped
+        thead
+          tr
+            th Site url
+            th Created at
+            th Actions
+        tbody
+          -unless res_length == 0
+            -res.each do |item|
               tr
-                th Site url
-                th Created at
-                th Actions
-            tbody
-              -unless res_length == 0
-                -res.each do |item|
-                  tr
-                    td: a href="http://#{item.url}" =item.url
-                    td =item.time
-                    td: a href="/report?file=#{item.view}" View
+                td: a href="http://#{item.url}" =item.url
+                td =item.time
+                td: a href="/report?file=#{item.view}" View
