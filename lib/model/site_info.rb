@@ -1,4 +1,5 @@
 require_relative 'link'
+
 #Include all info about site: url, headers, ip, country, hyperlinks.
 class SiteInfo
   attr_reader :headers, :links, :ip, :country, :url, :domain, :date
@@ -16,8 +17,7 @@ class SiteInfo
   end
 
   def add_link(name, url, rel, target)
-    _link = Link.new(name, url, rel, target)
-    @links << _link
+    @links << Link.new(name, url, rel, target)
   end
 
   def to_json(*a)
@@ -33,5 +33,4 @@ class SiteInfo
     _res.title = o["data"]["title"]
     _res
   end
-
 end

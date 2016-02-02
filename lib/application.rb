@@ -10,14 +10,14 @@ module App
     enable :sessions
     set :public_folder, './public'
     set :views, './views'
-    set :slim, default_encoding:'utf-8'
+    # set :slim, default_encoding:'utf-8'
     set :slim, :layout=> :main_layout
 
     before do
-      @slim_classes = Hash.new
-      @slim_classes[:home_class] = ''
-      @slim_classes[:login_class] = ''
-      @slim_classes[:contact_class] = ''
+      @slim_classes = {home_class: '', login_class: '', info_class: ''}
+      # @slim_classes[:home_class] = ''
+      # @slim_classes[:login_class] = ''
+      # @slim_classes[:contact_class] = ''
     end
 
     get '/' do
@@ -30,6 +30,7 @@ module App
     end
 
     get '/info' do
+      @slim_classes[:info_class] = 'active'
       slim :info
     end
 
@@ -41,11 +42,6 @@ module App
       @slim_classes[:login_class] = 'active'
       slim :login
     end
-
-    # get '/migrate' do
-    #   DataMapper.auto_migrate!
-    #   "successfull!"
-    # end
 
     post '/auth/unauthenticated' do
       session[:return_to] = env['warden.options'][:attempted_path]
@@ -70,6 +66,5 @@ module App
       env['warden'].logout
       redirect '/'
     end
-
   end
 end
