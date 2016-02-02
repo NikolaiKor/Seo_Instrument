@@ -164,6 +164,3 @@ DEPENDENCIES
   slim
   thin (~> 1.6)
   warden
-
-BUNDLED WITH
-   1.10.6

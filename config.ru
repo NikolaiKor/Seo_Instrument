@@ -3,5 +3,5 @@ require './lib/application'
 require 'slim'
 require './lib/controler/auth'
 
-DataMapperStorage.new
+# DataMapperStorage.new
 run App::Application

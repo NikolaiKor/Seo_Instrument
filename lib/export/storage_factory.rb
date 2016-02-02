@@ -2,10 +2,11 @@ require_relative '../../config/configuration'
 require_relative 'json/json_storage'
 require_relative 'sql_database/database_storage'
 require_relative 'data_mapper/data_mapper_storage'
+
 class StorageFactory
   def get_connector
-    @connector = init_connector if @connector.nil?
-    @connector
+    @connector ||= init_connector
+    # @connector
   end
 
   def init_connector

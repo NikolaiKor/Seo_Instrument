@@ -7,7 +7,8 @@ class Database_storage < AbstractStorage
 
   def initialize
     #host port options tty dbname user password
-    @connector = PG.connect(host: 'localhost', port: 5432, dbname: 'seo_database', user: 'seo', password: 'seopass')
+    # @connector = PG.connect(host: 'localhost', port: 5432, dbname: 'seo_database', user: 'seo', password: 'seopass')
+    @connector = PG.connect(host: 'localhost', port: 5432, dbname: 'test_database', user: 'seo', password: 'seopass')
     @connector.type_map_for_results = PG::BasicTypeMapForResults.new @connector
   end
 
@@ -29,7 +30,7 @@ class Database_storage < AbstractStorage
   def all_reports
     _buf = @connector.exec('SELECT id, url,date FROM reports')
     _report_list = []
-    _buf.each { |res| _report_list << ResultList.new(res["url"], res["date"].to_s, res["id"]) }
+    _buf.each { |res| _report_list << ResultList.new(res["url"], res["date"], res["id"]) }
     {res_length: _report_list.length, res: _report_list}
   end
 

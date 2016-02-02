@@ -1,4 +1,5 @@
 require 'data_mapper'
+
 class Report
   include DataMapper::Resource
 

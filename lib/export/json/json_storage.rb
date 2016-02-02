@@ -11,15 +11,15 @@ class JsonStorage < AbstractStorage
     Dir.foreach(BASE_DIR) do |filename|
       unless filename=='.' || filename=='..'
         _url, _time = filename.split('_')
-        _time.delete!(FILE_FORMAT)
-        _files_info << ResultList.new(_url, _time, filename)
+        _time.slice!(FILE_FORMAT)
+        _files_info << ResultList.new(_url, DateTime.parse(_time), filename)
       end
     end
     {res_length:_files_info.length, res:_files_info}
   end
 
   def add_report(info)
-    File.open(BASE_DIR + "#{domain_name(info.url)}_#{info.date}" + FILE_FORMAT, 'w') { |f| f.write(info.to_json) }
+    File.open(BASE_DIR + "#{domain_name(info.url)}_#{info.date.strftime('%d.%m.%Y %H:%M:%S')}" + FILE_FORMAT, 'w') { |f| f.write(info.to_json) }
   end
 
   def domain_name(url)

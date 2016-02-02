@@ -17,18 +17,18 @@ class SiteInfo
 
   def add_link(name, url, rel, target)
     _link = Link.new(name, url, rel, target)
-    @links << _link #unless name == '' && (url == nil || url == '') && rel == nil && target == nil
+    @links << _link
   end
 
   def to_json(*a)
     {
         "json_class"   => self.class.name,
-        "data"         => {"url" => @url, "title" => @title, "headers" => @headers, "links" => @links, "ip" => @ip, "country" => @country, "domain" => @domain, "date" => @date }
+        "data"         => {"url" => @url, "title" => @title, "ip" => @ip, "country" => @country, "domain" => @domain, "date" => @date, "headers" => @headers, "links" => @links}
     }.to_json(*a)
   end
 
   def self.json_create(o)
-    _res = new(o["data"]["url"], o["data"]["headers"], o["data"]["ip"], o["data"]["country"], o["data"]["date"])
+    _res = new(o["data"]["url"], o["data"]["headers"], o["data"]["ip"], o["data"]["country"], DateTime.parse(o["data"]["date"]))
     o["data"]["links"].each {|link| _res.add_link(link.name, link.url, link.rel, link.target)}
     _res.title = o["data"]["title"]
     _res

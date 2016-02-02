@@ -12,20 +12,20 @@ class RequestWorker
   def get_info(url)
     _url_copy = url_normalisation(url)
     _response = send_request(_url_copy)
-    _geo =GeoIP.new(GEO_IP_FILE).country(domain_name(url))
+    _geo = GeoIP.new(GEO_IP_FILE).country(domain_name(url))
     _headers = Hash.new()
     _response.headers.each { |key, value| _headers[key] = value }
-    _info = SiteInfo.new(_url_copy, _headers, _geo.ip, _geo.country_name, Time.now.strftime("%d.%m.%Y %H:%M:%S"))
+    _info = SiteInfo.new(_url_copy, _headers, _geo.ip, _geo.country_name, Time.now)
     parse_links(_response.body, _info)
     set_title(_response.body, _info)
-    _info.identifier = "#{_info.domain}_#{_info.date}"
+    _info.identifier = "#{_info.domain}_#{_info.date.strftime("%d.%m.%Y %H:%M:%S")}"
     StorageFactory.new.get_connector.add_report(_info)
     _info
   end
 
 
   def domain_name(url)
-    _url_copy = url
+    _url_copy = url.clone
     _position = _url_copy.index('//')
     _url_copy[0, _position+2] = '' if _position
     _position = _url_copy.index('/')
@@ -44,8 +44,8 @@ class RequestWorker
   private
 
   def url_normalisation(url)
-    _url_copy = url
-     _url_copy ='http://' + _url_copy if url['http://'].nil? && url['https://'].nil?
+    _url_copy = url.clone
+    _url_copy ='http://' + _url_copy if url['http://'].nil? && url['https://'].nil?
     _url_copy
   end
 

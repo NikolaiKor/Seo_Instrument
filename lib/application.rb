@@ -3,6 +3,7 @@ require 'sinatra'
 require_relative 'controler/request_worker'
 require_relative 'controler/files_manager'
 require 'json'
+# require_relative 'export/data_mapper/data_mapper_storage'
 
 module App
   class Application < Sinatra::Application
@@ -13,7 +14,6 @@ module App
     set :slim, :layout=> :main_layout
 
     before do
-      @slim_link = nil
       @slim_classes = Hash.new
       @slim_classes[:home_class] = ''
       @slim_classes[:login_class] = ''
@@ -29,8 +29,8 @@ module App
       slim :report, locals: {res: RequestWorker.new.get_report(@params['file'])}
     end
 
-    get "/nav" do
-      slim :nav
+    get '/info' do
+      slim :info
     end
 
     post '/link' do
@@ -39,10 +39,13 @@ module App
 
     get '/auth/login' do
       @slim_classes[:login_class] = 'active'
-      #@slim_link = []
-      #@slim_link << "/css//signin.css"
       slim :login
     end
+
+    # get '/migrate' do
+    #   DataMapper.auto_migrate!
+    #   "successfull!"
+    # end
 
     post '/auth/unauthenticated' do
       session[:return_to] = env['warden.options'][:attempted_path]
