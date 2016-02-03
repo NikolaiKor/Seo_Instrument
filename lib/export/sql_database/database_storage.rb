@@ -26,18 +26,18 @@ module SQLExport
       end
     end
 
-    def all_reports
-      _buf = @connector.exec('SELECT id, url,date FROM reports')
+    def all_reports(limited)
+      _query = 'SELECT id, url,date FROM reports ORDER BY date DESC'
+      _query << " LIMIT #{App::Configuration.instance.main_page_limit}" if limited
       _report_list = []
-      _buf.each { |res| _report_list << ResultList.new(res["url"], res["date"], res["id"]) }
+      @connector.exec(_query).each { |res| _report_list << ResultList.new(res["url"], res["date"], res["id"]) }
       {res_length: _report_list.length, res: _report_list}
     end
 
     def find_report(id)
-      _buf = @connector.exec('SELECT * FROM reports WHERE id = $1 LIMIT 1', [id])
       _headers = Hash.new
       _result = nil
-      _buf.each do |res|
+      @connector.exec('SELECT * FROM reports WHERE id = $1 LIMIT 1', [id]).each do |res|
         _buf_headers = @connector.exec("SELECT * from headers where report_id = $1::int", [id])
         _buf_headers.each { |h| _headers[h['h_key']] = h['value'] }
         _result = SiteInfo.new(res["url"], _headers, res["ip"].to_s, res["country"], res["date"])

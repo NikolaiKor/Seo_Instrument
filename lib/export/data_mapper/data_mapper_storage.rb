@@ -13,9 +13,11 @@ module DataMapperExport
       DataMapper.auto_upgrade!
     end
 
-    def all_reports
+    def all_reports(limited)
       _report_list = []
-      Report.each { |report| _report_list << ResultList.new(report.url, report.date, report.id) }
+      _querry_params = {order: [:date.desc]}
+      _querry_params[:limit] = App::Configuration.instance.main_page_limit if limited
+      Report.all(_querry_params).each { |report| _report_list << ResultList.new(report.url, report.date, report.id) }
       {res_length: _report_list.length, res: _report_list}
     end
 

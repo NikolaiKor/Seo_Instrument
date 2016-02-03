@@ -5,7 +5,7 @@ module JsonExport
   class JsonStorage < App::AbstractStorage
     FILE_FORMAT = '.json'
 
-    def all_reports
+    def all_reports(limited)
       _files_info = []
       Dir.foreach(App::Configuration.instance.json['base_dir']) do |filename|
         unless filename=='.' || filename=='..'
@@ -14,6 +14,8 @@ module JsonExport
           _files_info << ResultList.new(_url, DateTime.parse(_time), filename)
         end
       end
+      _files_info.sort! { |a, b|  b.time <=> a.time }
+      _files_info = limited ? _files_info[0, App::Configuration.instance.main_page_limit] : _files_info
       {res_length: _files_info.length, res: _files_info}
     end
 

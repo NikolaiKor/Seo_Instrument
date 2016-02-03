@@ -34,8 +34,8 @@ module App
       _url_copy
     end
 
-    def get_reports_list
-      StorageFactory.new.get_connector.all_reports
+    def get_reports_list(limited = false)
+      StorageFactory.new.get_connector.all_reports(limited)
     end
 
     def get_report(file_id)

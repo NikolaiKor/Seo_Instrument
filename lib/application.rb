@@ -16,7 +16,7 @@ module App
 
     get '/' do
       @slim_active_tab = 'home'
-      slim :index, locals: RequestWorker.new.get_reports_list
+      slim :index, locals: RequestWorker.new.get_reports_list(true)
     end
 
     get '/report' do
