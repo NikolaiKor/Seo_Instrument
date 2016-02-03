@@ -1,5 +1,6 @@
 td {
     max-width: 250px;
+    word-wrap: break-word
 }
 .input-group{
     margin-bottom: 20px;

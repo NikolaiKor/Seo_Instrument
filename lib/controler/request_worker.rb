@@ -20,7 +20,7 @@ module App
       _info = SiteInfo.new(cut_string(_url_copy), _headers, _geo.ip, _geo.country_name, Time.now)
       parse_links(_response.body, _info)
       set_title(_response.body, _info)
-      _info.identifier = "#{_info.domain}_#{_info.date.strftime("%d.%m.%Y %H:%M:%S")}"
+      _info.identifier = "#{_info.domain}_#{_info.date.strftime(Configuration.instance.time_format)}"
       StorageFactory.new.get_connector.add_report(_info)
       _info
     end
@@ -69,6 +69,7 @@ module App
     end
 
     def cut_string(str)
+      return '' if str.nil?
       str.length < URL_PRIMARY_PROPERTIES_LENGTH ? str : str[0, URL_PRIMARY_PROPERTIES_LENGTH-3]+'...'
     end
   end
