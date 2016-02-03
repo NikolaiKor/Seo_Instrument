@@ -1,0 +1,13 @@
+storage_type: data_mapper_storage # pg_database json
+max_url_info: 255
+time_format: '%d.%m.%Y %H:%M:%S'
+json:
+  base_dir: './public/reports/'
+postgres:
+  host: localhost
+  port: 5432
+  dbname: test_database
+  user: seo
+  password: seopass
+data_mapper:
+  database_url: 'postgres://nikolai:nikolai@localhost/test_database'

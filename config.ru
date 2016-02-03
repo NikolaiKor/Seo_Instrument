@@ -2,6 +2,7 @@
 require './lib/application'
 require 'slim'
 require './lib/controler/auth'
+require_relative 'lib/configuration/configuration'
 
-DataMapperStorage.new
+App::Configuration.instance.load
 run App::Application

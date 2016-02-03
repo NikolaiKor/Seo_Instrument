@@ -1,11 +1,13 @@
-.wrap_result_table
-  .search_form
-    .content_search
-      form action="/link" method="POST"
-        input type="text" name="url" placeholder ="Enter url"
-        button.btn.btn-lg.btn-success type="submit" Run
-  .result_table
-    div.panel.panel-success
+.col-sm-10.col-sm-offset-1
+  .col-sm-6.col-sm-offset-3
+    .site-form-wrapper
+      form role="form" action="/link" method="POST"
+        .input-group
+          input.form-control type="text" name="url" placeholder ="Enter url"
+          span.input-group-btn
+            button.btn.btn-success type="submit" Run
+  .col-sm-12
+    .panel.panel-success
       .panel-heading
         h3.panel-title Reports history
       table.table.table-striped
@@ -19,5 +21,5 @@
             -res.each do |item|
               tr
                 td: a href="http://#{item.url}" =item.url
-                td =item.time
+                td =item.time.strftime(App::Configuration.instance.time_format)
                 td: a href="/report?file=#{item.view}" View

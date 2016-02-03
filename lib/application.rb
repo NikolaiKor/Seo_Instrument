@@ -1,4 +1,3 @@
-# encoding: utf-8
 require 'sinatra'
 require_relative 'controler/request_worker'
 require_relative 'controler/files_manager'
@@ -9,19 +8,14 @@ module App
     enable :sessions
     set :public_folder, './public'
     set :views, './views'
-    set :slim, default_encoding:'utf-8'
     set :slim, :layout=> :main_layout
 
     before do
-      @slim_link = nil
-      @slim_classes = Hash.new
-      @slim_classes[:home_class] = ''
-      @slim_classes[:login_class] = ''
-      @slim_classes[:contact_class] = ''
+      @slim_active_tab = nil
     end
 
     get '/' do
-      @slim_classes[:home_class] = 'active'
+      @slim_active_tab = 'home'
       slim :index, locals: RequestWorker.new.get_reports_list
     end
 
@@ -29,8 +23,9 @@ module App
       slim :report, locals: {res: RequestWorker.new.get_report(@params['file'])}
     end
 
-    get "/nav" do
-      slim :nav
+    get '/info' do
+      @slim_active_tab = 'info'
+      slim :info
     end
 
     post '/link' do
@@ -38,9 +33,7 @@ module App
     end
 
     get '/auth/login' do
-      @slim_classes[:login_class] = 'active'
-      #@slim_link = []
-      #@slim_link << "/css//signin.css"
+      @slim_active_tab = 'login'
       slim :login
     end
 
@@ -67,6 +60,5 @@ module App
       env['warden'].logout
       redirect '/'
     end
-
   end
 end

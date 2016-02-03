@@ -5,8 +5,6 @@ class User
   property :username, String
   property :password, String
 
-  DataMapper.finalize
-
   def authenticate(attempted_password)
     if self.password == attempted_password
       true

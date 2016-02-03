@@ -1,63 +1,56 @@
-doctype 5
-html
-  head
-    link href="/css//bootstrap.min.css" rel="stylesheet"
-    link href="/css/bootstrap-theme.min.css" rel="stylesheet"
-    link href="/css/my_style.css" rel="stylesheet"
-  body
-    .wrap
-      h1: p
-        'Report for
-        a href="#{res.url}" =res.url
-      br
-      .date
-        'Date:
-        =res.date
-        br
-        'Title:
-        =res.title
-      .panel.panel-success
-        .panel-heading
-          h3.panel-title Response headers
-        table.table.table-striped
-          tr
-            th Name
-            th Value
-          -res.headers.each do |key, value|
-            tr
-              td =key
-              td =value
-      br
+.wrap
+  h1: p
+    'Report for
+    a href="#{res.url}" =res.url
+  br
+  .date
+    'Date:
+    =res.date.strftime(App::Configuration.instance.time_format)
+    br
+    'Title:
+    =res.title
+  .panel.panel-success
+    .panel-heading
+      h3.panel-title Response headers
+    table.table.table-striped
+      tr
+        th Name
+        th Value
+      -res.headers.each do |key, value|
+        tr
+          td =key
+          td =value
+  br
 
-      .panel.panel-success
-        .panel-heading
-          h3.panel-title Page links
-        table.table.table-striped
-          thead
-            tr
-              th Name
-              th URL
-              th Rel
-              th Target
-          tbody
-            -res.links.each do |item|
-              tr
-                td =item.name
-                td: a href="#{item.url}" =item.url
-                td =item.rel
-                td =item.target
-      br
+  .panel.panel-success
+    .panel-heading
+      h3.panel-title Page links
+    table.table.table-striped
+      thead
+        tr
+          th Name
+          th URL
+          th Rel
+          th Target
+      tbody
+        -res.links.each do |item|
+          tr
+            td =item.name
+            td: a href="#{item.url}" =item.url
+            td =item.rel
+            td =item.target
+  br
 
-      .panel.panel-success
-        .panel-heading
-          h3.panel-title Other information
-        table.table.table-striped
-          tr
-            th Name
-            th Value
-          tr
-            td IP
-            td =res.ip
-          tr
-            td Country
-            td =res.country
+  .panel.panel-success
+    .panel-heading
+      h3.panel-title Other information
+    table.table.table-striped
+      tr
+        th Name
+        th Value
+      tr
+        td IP
+        td =res.ip
+      tr
+        td Country
+        td =res.country

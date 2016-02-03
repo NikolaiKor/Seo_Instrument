@@ -3,13 +3,12 @@ html
   head
     title Seo Instrument
     link href="/css//bootstrap.min.css" rel="stylesheet"
-    -unless @slim_link.nil?
-      -@slim_link.each { |href|  "link href=\"#{href}\" rel=\"stylesheet\"" }
-    link href="/css/bootstrap-theme.min.css" rel="stylesheet"
-    link href="/css/my_style.css" rel="stylesheet"
+    link href="/css/app.css" rel="stylesheet"
+    script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"
+    script src="/js/bootstrap.min.js"
   body
-    nav.navbar.navbar-default
-      .container-fluid
+    .nav.navbar.navbar-default.navbar-static-top
+      .container
         .navbar-header
           button.navbar-toggle.collapsed aria-controls="navbar" aria-expanded="false" data-target="#navbar" data-toggle="collapse" type="button"
             span.sr-only Toggle navigation
@@ -19,11 +18,11 @@ html
           a.navbar-brand href="/"  Seo Instrument
         #navbar.navbar-collapse.collapse
           ul.nav.navbar-nav
-            li class="#{@slim_classes[:home_class]}"
-              a href="/"  Home
-            li class="#{@slim_classes[:login_class]}"
-              a href="/auth/login"  Login
-            li class="#{@slim_classes[:contact_class]}"
-              a href="#"  Contact
-    .jumbotron
+            li class="#{'active' if @slim_active_tab == 'home'}"
+              a href="/" Home
+              li class="#{'active' if @slim_active_tab == 'login'}"
+                a href="/auth/login" Login
+              li class="#{'active' if @slim_active_tab == 'info'}"
+                a href="/info" Info
+    .container
       == yield
