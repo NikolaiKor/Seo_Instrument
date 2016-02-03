@@ -18,11 +18,11 @@ html
           a.navbar-brand href="/"  Seo Instrument
         #navbar.navbar-collapse.collapse
           ul.nav.navbar-nav
-            li class="#{@slim_classes[:home_class]}"
-              a href="/"  Home
-              li class="#{@slim_classes[:login_class]}"
-                a href="/auth/login"  Login
-              li class="#{@slim_classes[:info_class]}"
-                a href="/info"  Info
+            li class="#{'active' if @slim_active_tab == 'home'}"
+              a href="/" Home
+              li class="#{'active' if @slim_active_tab == 'login'}"
+                a href="/auth/login" Login
+              li class="#{'active' if @slim_active_tab == 'info'}"
+                a href="/info" Info
     .container
       == yield

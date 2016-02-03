@@ -5,7 +5,7 @@
   br
   .date
     'Date:
-    =res.date.strftime('%d.%m.%Y %H:%M:%S')
+    =res.date.strftime(App::Configuration.instance.time_format)
     br
     'Title:
     =res.title

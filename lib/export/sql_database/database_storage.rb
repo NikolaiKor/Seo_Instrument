@@ -5,10 +5,9 @@ require_relative '../../model/result_list'
 
 module SQLExport
   class DatabaseStorage < App::AbstractStorage
-    TYPE = 'pg_database'
-
     def initialize
-      @connector = PG.connect(host: 'localhost', port: 5432, dbname: 'test_database', user: 'seo', password: 'seopass')
+      _config = App::Configuration.instance.postgres
+      @connector = PG.connect(host: _config['host'], port: _config['port'], dbname: _config['dbname'], user: _config['user'], password: _config['password'])
       @connector.type_map_for_results = PG::BasicTypeMapForResults.new @connector
     end
 

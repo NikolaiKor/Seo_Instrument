@@ -7,11 +7,8 @@ require_relative 'link'
 
 module DataMapperExport
   class DataMapperStorage
-    TYPE = 'data_mapper_storage'
-
     def initialize
-      # DataMapper.setup(:default, ENV['DATABASE_URL'] ||  'postgres://seo:seopass@localhost/seo_database')
-      DataMapper.setup(:default, ENV['DATABASE_URL'] || 'postgres://nikolai:nikolai@localhost/test_database')
+      DataMapper.setup(:default, ENV['DATABASE_URL'] || App::Configuration.instance.data_mapper['database_url'])
       DataMapper.finalize
       DataMapper.auto_upgrade!
     end
@@ -28,7 +25,7 @@ module DataMapperExport
       if _report.save
         _id = _report.id
         report.headers.each { |r_key, r_value| Header.new(:h_key => r_key, :value => r_value, :report_id => _id).save }
-        report.links.each { |link| _link = LinkRow.new(name: link.name, url: link.url, rel: link.rel, target: link.target, report_id: _id).save }
+        report.links.each { |link| _link = Link.new(name: link.name, url: link.url, rel: link.rel, target: link.target, report_id: _id).save }
       end
     end
 
@@ -38,7 +35,7 @@ module DataMapperExport
       Header.all(report_id: report_id).each { |h| _headers[h[:h_key]] =h[:value] }
       _result = SiteInfo.new(_report.url, _headers, _report.ip.to_s, _report.country, _report.date)
       _result.title = _report.title
-      LinkRow.all(report_id: report_id).each { |link| _result.add_link(link.name, link.url, link.rel, link.target) }
+      Link.all(report_id: report_id).each { |link| _result.add_link(link.name, link.url, link.rel, link.target) }
       _result
     end
   end

@@ -1,14 +1,13 @@
 require_relative '../abstract_storage'
+require_relative '../../../lib/configuration/configuration'
 
 module JsonExport
   class JsonStorage < App::AbstractStorage
-    TYPE = 'json'
-    BASE_DIR = './public/reports/'
     FILE_FORMAT = '.json'
 
     def all_reports
       _files_info = []
-      Dir.foreach(BASE_DIR) do |filename|
+      Dir.foreach(App::Configuration.instance.json['base_dir']) do |filename|
         unless filename=='.' || filename=='..'
           _url, _time = filename.split('_')
           _time.slice!(FILE_FORMAT)
@@ -19,7 +18,7 @@ module JsonExport
     end
 
     def add_report(info)
-      File.open(BASE_DIR + "#{domain_name(info.url)}_#{info.date.strftime('%d.%m.%Y %H:%M:%S')}" + FILE_FORMAT, 'w') { |f| f.write(info.to_json) }
+      File.open(App::Configuration.instance.json['base_dir'] + "#{domain_name(info.url)}_#{info.date.strftime('%d.%m.%Y %H:%M:%S')}" + FILE_FORMAT, 'w') { |f| f.write(info.to_json) }
     end
 
     def domain_name(url)
@@ -32,7 +31,7 @@ module JsonExport
     end
 
     def find_report(file_name)
-      File.open(BASE_DIR + file_name, 'r') { |f| JSON.load(f.read) }
+      File.open(App::Configuration.instance.json['base_dir'] + file_name, 'r') { |f| JSON.load(f.read) }
     end
   end
 end

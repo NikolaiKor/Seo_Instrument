@@ -16,8 +16,8 @@ module App
       _response = send_request(_url_copy)
       _geo = GeoIP.new(GEO_IP_FILE).country(domain_name(url))
       _headers = Hash.new()
-      _response.headers.each { |key, value| _headers[key] = value }
-      _info = SiteInfo.new(_url_copy, _headers, _geo.ip, _geo.country_name, Time.now)
+      _response.headers.each { |key, value| _headers[cut_string(key)] = cut_string(value) }
+      _info = SiteInfo.new(cut_string(_url_copy), _headers, _geo.ip, _geo.country_name, Time.now)
       parse_links(_response.body, _info)
       set_title(_response.body, _info)
       _info.identifier = "#{_info.domain}_#{_info.date.strftime("%d.%m.%Y %H:%M:%S")}"
@@ -59,13 +59,17 @@ module App
     def parse_links(body, info)
       _doc = Nokogiri::HTML(body)
       _links = _doc.css('a')
-      _links.each { |link| info.add_link(link.text, link['href'],
+      _links.each { |link| info.add_link(cut_string(link.text), cut_string(link['href']),
                                          link['rel'], link['target']) } unless _links.nil?
     end
 
     def set_title(body, info)
       _doc = Nokogiri::HTML(body)
-      info.title = _doc.css('title').text
+      info.title = cut_string(_doc.css('title').text)
+    end
+
+    def cut_string(str)
+      str.length < URL_PRIMARY_PROPERTIES_LENGTH ? str : str[0, URL_PRIMARY_PROPERTIES_LENGTH-3]+'...'
     end
   end
 end

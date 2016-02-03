@@ -1,27 +1,21 @@
-# encoding: utf-8
 require 'sinatra'
 require_relative 'controler/request_worker'
 require_relative 'controler/files_manager'
 require 'json'
-# require_relative 'export/data_mapper/data_mapper_storage'
 
 module App
   class Application < Sinatra::Application
     enable :sessions
     set :public_folder, './public'
     set :views, './views'
-    # set :slim, default_encoding:'utf-8'
     set :slim, :layout=> :main_layout
 
     before do
-      @slim_classes = {home_class: '', login_class: '', info_class: ''}
-      # @slim_classes[:home_class] = ''
-      # @slim_classes[:login_class] = ''
-      # @slim_classes[:contact_class] = ''
+      @slim_active_tab = nil
     end
 
     get '/' do
-      @slim_classes[:home_class] = 'active'
+      @slim_active_tab = 'home'
       slim :index, locals: RequestWorker.new.get_reports_list
     end
 
@@ -30,7 +24,7 @@ module App
     end
 
     get '/info' do
-      @slim_classes[:info_class] = 'active'
+      @slim_active_tab = 'info'
       slim :info
     end
 
@@ -39,7 +33,7 @@ module App
     end
 
     get '/auth/login' do
-      @slim_classes[:login_class] = 'active'
+      @slim_active_tab = 'login'
       slim :login
     end
 

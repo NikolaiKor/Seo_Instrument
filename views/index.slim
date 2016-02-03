@@ -21,5 +21,5 @@
             -res.each do |item|
               tr
                 td: a href="http://#{item.url}" =item.url
-                td =item.time.strftime('%d.%m.%Y %H:%M:%S')
+                td =item.time.strftime(App::Configuration.instance.time_format)
                 td: a href="/report?file=#{item.view}" View
