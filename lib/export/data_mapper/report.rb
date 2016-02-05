@@ -11,5 +11,6 @@ module DataMapperExport
     property :ip, String
     property :country, String
     property :date, DateTime
+    property :user_id, Integer
   end
 end

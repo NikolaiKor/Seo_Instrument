@@ -4,7 +4,7 @@ require 'nokogiri'
 require 'httparty'
 require_relative '../model/site_info'
 require_relative '../model/link'
-require_relative '../../lib/export/storage_factory'
+require './lib/export/storage_factory'
 
 module App
 #Send Get request to url, and parse it

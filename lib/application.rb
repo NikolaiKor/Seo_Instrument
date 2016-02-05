@@ -8,7 +8,7 @@ module App
     enable :sessions
     set :public_folder, './public'
     set :views, './views'
-    set :slim, :layout=> :main_layout
+    set :slim, :layout => :main_layout
 
     before do
       @slim_active_tab = nil
@@ -45,9 +45,7 @@ module App
 
     post '/auth/login' do
       env['warden'].authenticate!
-
       #_a = env['warden'].message
-
       if session[:return_to].nil?
         redirect '/'
       else

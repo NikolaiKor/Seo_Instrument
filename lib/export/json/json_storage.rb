@@ -1,5 +1,5 @@
 require_relative '../abstract_storage'
-require_relative '../../../lib/configuration/configuration'
+require './lib/configuration/configuration'
 
 module JsonExport
   class JsonStorage < App::AbstractStorage
@@ -14,7 +14,7 @@ module JsonExport
           _files_info << ResultList.new(_url, DateTime.parse(_time), filename)
         end
       end
-      _files_info.sort! { |a, b|  b.time <=> a.time }
+      _files_info.sort! { |a, b| b.time <=> a.time }
       _files_info = limited ? _files_info[0, App::Configuration.instance.main_page_limit] : _files_info
       {res_length: _files_info.length, res: _files_info}
     end
@@ -34,6 +34,14 @@ module JsonExport
 
     def find_report(file_name)
       File.open(App::Configuration.instance.json['base_dir'] + file_name, 'r') { |f| JSON.load(f.read) }
+    end
+
+    def password_auth(username, password)
+      raise NotImplementedError;
+    end
+
+    def get_user_by_id(id)
+      raise NotImplementedError;
     end
   end
 end

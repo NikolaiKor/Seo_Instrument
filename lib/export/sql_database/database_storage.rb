@@ -1,7 +1,8 @@
 require_relative '../abstract_storage'
 require 'pg'
-require_relative '../../model/site_info'
-require_relative '../../model/result_list'
+require './lib/model/site_info'
+require './lib/model/result_list'
+require './lib/model/user'
 
 module SQLExport
   class DatabaseStorage < App::AbstractStorage
@@ -46,6 +47,22 @@ module SQLExport
         _result.title = res["title"]
       end
       _result
+    end
+
+    def password_auth(username, password)
+      _user = nil
+      @connector.exec('SELECT id FROM users WHERE username = $1 AND password = $2 LIMIT 1', [username, password]).each do |res|
+        _user = User.new(res['id'], username, password)
+      end
+      _user
+    end
+
+    def get_user_by_id(id)
+      _user = nil
+      @connector.exec('SELECT username, password FROM users WHERE id = $1 LIMIT 1', [id]).each do |res|
+        _user = User.new(id, res['username'], res['password'])
+      end
+      _user
     end
   end
 end

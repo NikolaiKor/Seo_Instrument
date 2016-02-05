@@ -4,6 +4,8 @@ require_relative 'report'
 require_relative '../../model/site_info'
 require_relative '../../model/result_list'
 require_relative 'link'
+require_relative 'user'
+require './lib/model/user'
 
 module DataMapperExport
   class DataMapperStorage
@@ -39,6 +41,16 @@ module DataMapperExport
       _result.title = _report.title
       Link.all(report_id: report_id).each { |link| _result.add_link(link.name, link.url, link.rel, link.target) }
       _result
+    end
+
+    def password_auth(username, password)
+      _db_user = User.first(username: username, password: password)
+      ::User.new(_db_user.id, username, password)
+    end
+
+    def get_user_by_id(id)
+      _db_user = User.first(id: id)
+      ::User.new(id, _db_user.username, _db_user.password)
     end
   end
 end
