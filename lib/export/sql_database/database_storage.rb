@@ -27,9 +27,11 @@ module SQLExport
       end
     end
 
-    def all_reports(limited)
-      _query = 'SELECT id, url,date FROM reports ORDER BY date DESC'
-      _query << " LIMIT #{App::Configuration.instance.main_page_limit}" if limited
+    def all_reports(page, per_page, user_id)
+      _query = 'SELECT id, url, date FROM reports'
+      _query << " WHERE user_id = #{user_id}" unless user_id.nil?
+      _query << " ORDER BY date DESC LIMIT #{per_page}"
+      _query << " OFFSET #{per_page * (page - 1)}" if page > 1
       _report_list = []
       @connector.exec(_query).each { |res| _report_list << ResultList.new(res["url"], res["date"], res["id"]) }
       {res_length: _report_list.length, res: _report_list}

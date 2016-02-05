@@ -2,6 +2,31 @@ td {
     max-width: 250px;
     word-wrap: break-word
 }
+.logout{
+    padding-top: 12px;
+    padding-bottom: 10px;
+}
+.logout:focus{
+    text-decoration: none;
+}
+.logout:hover{
+    text-decoration: none;
+}
+/*.btn-link{*/
+    /*border:none;*/
+    /*outline:none;*/
+    /*background:none;*/
+    /*cursor:pointer;*/
+    /*color:#777;*/
+    /*padding:0;*/
+    /*font-family:inherit;*/
+    /*font-size:inherit;*/
+    /*text-decoration: none;*/
+/*}*/
+
+/*.btn-link:focus{*/
+    /*text-decoration: none;*/
+/*}*/
 .input-group{
     margin-bottom: 20px;
 }

@@ -3,12 +3,14 @@ require 'warden'
 require './lib/application'
 require_relative 'password_strategy'
 
+use Rack::Session::Cookie, :secret => "secret key"
+
 use Warden::Manager do |config|
   config.serialize_into_session { |user| user.id }
-  config.serialize_from_session { |id| User.get(id) }
-  config.default_scope = :user
+  config.serialize_from_session { |id| User.get(id)}
+  # config.default_scope = :user
 
-  config.scope_defaults :user, strategies: [:password], action: 'auth/unauthenticated'
+  config.scope_defaults :default, strategies: [:password], action: 'auth/unauthenticated'
   config.failure_app = App::Application
 end
 

@@ -11,13 +11,13 @@ module App
   class RequestWorker
     GEO_IP_FILE = './lib/controler/GeoIP.dat'
 
-    def get_info(url)
+    def get_info(url, user_id)
       _url_copy = url_normalisation(url)
       _response = send_request(_url_copy)
       _geo = GeoIP.new(GEO_IP_FILE).country(domain_name(url))
       _headers = Hash.new()
       _response.headers.each { |key, value| _headers[cut_string(key)] = cut_string(value) }
-      _info = SiteInfo.new(cut_string(_url_copy), _headers, _geo.ip, _geo.country_name, Time.now)
+      _info = SiteInfo.new(cut_string(_url_copy), _headers, _geo.ip, _geo.country_name, Time.now, user_id)
       parse_links(_response.body, _info)
       set_title(_response.body, _info)
       _info.identifier = "#{_info.domain}_#{_info.date.strftime(Configuration.instance.time_format)}"
@@ -34,8 +34,8 @@ module App
       _url_copy
     end
 
-    def get_reports_list(limited = false)
-      StorageFactory.new.get_connector.all_reports(limited)
+    def get_reports_list(page, per_page, user_id = nil)
+      StorageFactory.new.get_connector.all_reports(page, per_page, user_id)
     end
 
     def get_report(file_id)

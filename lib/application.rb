@@ -2,6 +2,7 @@ require 'sinatra'
 require_relative 'controler/request_worker'
 require_relative 'controler/files_manager'
 require 'json'
+require_relative 'helpers'
 
 module App
   class Application < Sinatra::Application
@@ -16,7 +17,11 @@ module App
 
     get '/' do
       @slim_active_tab = 'home'
-      slim :index, locals: RequestWorker.new.get_reports_list(true)
+      _page = @params[:page].to_i
+      _page = 1 if _page <= 0
+      _per_page = @params[:per_page].to_i
+      _per_page = 3 if _per_page <= 0
+      slim :main_block, locals: RequestWorker.new.get_reports_list(_page, _per_page)
     end
 
     get '/report' do
@@ -29,7 +34,7 @@ module App
     end
 
     post '/link' do
-      slim :report, locals: {res: RequestWorker.new.get_info(@params['url'])}
+      slim :report, locals: {res: RequestWorker.new.get_info(@params['url'], current_user_id)}
     end
 
     get '/auth/login' do
@@ -45,9 +50,8 @@ module App
 
     post '/auth/login' do
       env['warden'].authenticate!
-      #_a = env['warden'].message
       if session[:return_to].nil?
-        redirect '/'
+        redirect '/my_reports'
       else
         redirect session[:return_to]
       end
@@ -57,6 +61,16 @@ module App
       env['warden'].raw_session.inspect
       env['warden'].logout
       redirect '/'
+    end
+
+    get '/my_reports' do
+      print current_user_id
+      @slim_active_tab = 'my_reports'
+      _page = @params[:page].to_i
+      _page = 1 if _page <= 0
+      _per_page = @params[:per_page].to_i
+      _per_page = 3 if _per_page <= 0
+      slim :main_block, locals: RequestWorker.new.get_reports_list(_page, _per_page, current_user_id)
     end
   end
 end

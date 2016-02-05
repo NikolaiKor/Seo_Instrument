@@ -1,8 +1,8 @@
 require 'data_mapper'
 require_relative 'header'
 require_relative 'report'
-require_relative '../../model/site_info'
-require_relative '../../model/result_list'
+require './lib/model/site_info'
+require './lib/model/result_list'
 require_relative 'link'
 require_relative 'user'
 require './lib/model/user'
@@ -15,16 +15,17 @@ module DataMapperExport
       DataMapper.auto_upgrade!
     end
 
-    def all_reports(limited)
+    def all_reports(page, per_page, user_id)
       _report_list = []
-      _querry_params = {order: [:date.desc]}
-      _querry_params[:limit] = App::Configuration.instance.main_page_limit if limited
+      _querry_params = {order: [:date.desc], limit: per_page, user_id: user_id}
+      _querry_params[:offset] = per_page * (page - 1) if page > 1
+
       Report.all(_querry_params).each { |report| _report_list << ResultList.new(report.url, report.date, report.id) }
       {res_length: _report_list.length, res: _report_list}
     end
 
     def add_report(report)
-      _params = {url: report.url.force_encoding("UTF-8"), title: report.title.force_encoding("UTF-8"), country: report.country.force_encoding("UTF-8"), date: report.date, ip: report.ip}
+      _params = {url: report.url.force_encoding("UTF-8"), title: report.title.force_encoding("UTF-8"), country: report.country.force_encoding("UTF-8"), date: report.date, ip: report.ip, user_id: report.user_id}
       _report = Report.new(_params)
       if _report.save
         _id = _report.id

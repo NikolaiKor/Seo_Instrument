@@ -5,6 +5,7 @@ require_relative 'data_mapper/data_mapper_storage'
 
 module App
   class StorageFactory
+
     def get_connector
       @connector ||= init_connector
     end
