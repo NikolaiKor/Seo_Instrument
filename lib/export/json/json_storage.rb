@@ -1,11 +1,11 @@
 require_relative '../abstract_storage'
-require_relative '../../../lib/configuration/configuration'
+require './lib/configuration/configuration'
 
 module JsonExport
   class JsonStorage < App::AbstractStorage
     FILE_FORMAT = '.json'
 
-    def all_reports
+    def all_reports(page, per_page, user_id)
       _files_info = []
       Dir.foreach(App::Configuration.instance.json['base_dir']) do |filename|
         unless filename=='.' || filename=='..'
@@ -14,6 +14,8 @@ module JsonExport
           _files_info << ResultList.new(_url, DateTime.parse(_time), filename)
         end
       end
+      _files_info.sort! { |a, b| b.time <=> a.time }
+      _files_info = _files_info[page * (per_page - 1), per_page]
       {res_length: _files_info.length, res: _files_info}
     end
 
@@ -32,6 +34,18 @@ module JsonExport
 
     def find_report(file_name)
       File.open(App::Configuration.instance.json['base_dir'] + file_name, 'r') { |f| JSON.load(f.read) }
+    end
+
+    def password_auth(username, password)
+      raise NotImplementedError;
+    end
+
+    def get_user_by_id(id)
+      nil
+    end
+
+    def destroy_report(report_id, user_id)
+      raise NotImplementedError;
     end
   end
 end

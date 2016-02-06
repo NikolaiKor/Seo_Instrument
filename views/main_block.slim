@@ -1,0 +1,33 @@
+.col-sm-10.col-sm-offset-1
+  .col-sm-6.col-sm-offset-3
+    .site-form-wrapper
+      form role="form" action="/reports/new" method="POST"
+        .input-group
+          input.form-control type="text" autofocus='' name="url" placeholder ="Enter url"
+          span.input-group-btn
+            button.btn.btn-success type="submit" Run
+  .col-sm-12
+    .panel.panel-success
+      .panel-heading
+        -if @slim_active_tab == 'my_reports'
+          h3.panel-title Your last reports
+        -else
+          h3.panel-title Last reports (unauthenticated users)
+      table.table.table-striped
+        thead
+          tr
+            th Site url
+            th Created at
+            th Actions
+        tbody
+          -unless res_length == 0
+            -res.each do |item|
+              tr
+                td: a href="http://#{item.url}" =item.url
+                td =item.time.strftime(App::Configuration.instance.time_format)
+                td
+                  a.btn.btn-info.btn-xs href="/reports/show?file=#{item.view}" View
+                  -if @slim_active_tab == 'my_reports'
+                    .destroy-form
+                      form role="form" action="/reports/destroy?id=#{item.view}" method="POST"
+                        button.btn.btn-danger.btn-xs type="submit" Remove

@@ -2,10 +2,10 @@ require_relative 'link'
 
 #Include all info about site: url, headers, ip, country, hyperlinks.
 class SiteInfo
-  attr_reader :headers, :links, :ip, :country, :url, :domain, :date
+  attr_reader :headers, :links, :ip, :country, :url, :domain, :date, :user_id
   attr_accessor :title, :identifier
 
-  def initialize(url, headers, ip, country, date)
+  def initialize(url, headers, ip, country, date, user_id)
     @url = url
     @title = ''
     @headers = headers
@@ -14,6 +14,7 @@ class SiteInfo
     @country = country
     @date = date
     @identifier =''
+    @user_id = user_id
   end
 
   def add_link(name, url, rel, target)

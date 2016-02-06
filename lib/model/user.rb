@@ -1,15 +1,19 @@
+require './lib/export/storage_factory'
+
 class User
-  include DataMapper::Resource
+  attr_reader :id, :username
 
-  property :id,       Serial
-  property :username, String
-  property :password, String
+  def initialize(id, username, password)
+    @id = id
+    @username = username
+    @password = password
+  end
 
-  def authenticate(attempted_password)
-    if self.password == attempted_password
-      true
-    else
-      false
-    end
+  def self.authenticate(username, password)
+    App::StorageFactory.new.get_connector.password_auth(username, password)
+  end
+
+  def self.get(id)
+    App::StorageFactory.new.get_connector.get_user_by_id(id)
   end
 end

@@ -1,5 +1,23 @@
 td {
     max-width: 250px;
+    word-wrap: break-word
+}
+.logout{
+    padding-top: 12px;
+    padding-bottom: 10px;
+}
+.logout:focus, .logout:hover{
+    text-decoration: none;
+}
+.destroy-form{
+    display: inline-block;
+}
+.gem-badge{
+    margin-left: 1px;
+    margin-right: 1px;
+}
+.gem-badge:focus, .gem-badge:hover{
+    text-decoration: none;
 }
 .input-group{
     margin-bottom: 20px;

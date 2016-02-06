@@ -1,8 +1,9 @@
 doctype 5
 html
   head
-    title Seo Instrument
-    link href="/css//bootstrap.min.css" rel="stylesheet"
+    title = @title
+    /title Seo Instrument
+    link href="/css/bootstrap.min.css" rel="stylesheet"
     link href="/css/app.css" rel="stylesheet"
     script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"
     script src="/js/bootstrap.min.js"
@@ -20,9 +21,19 @@ html
           ul.nav.navbar-nav
             li class="#{'active' if @slim_active_tab == 'home'}"
               a href="/" Home
-              li class="#{'active' if @slim_active_tab == 'login'}"
-                a href="/auth/login" Login
+              -if env['warden'].user.nil?
+                li class="#{'active' if @slim_active_tab == 'login'}"
+                  a href="/auth/login" Login
               li class="#{'active' if @slim_active_tab == 'info'}"
                 a href="/info" Info
+          - unless env['warden'].user.nil?
+            ul.nav.navbar-nav.navbar-right
+              li class="#{'active' if @slim_active_tab == 'my_reports'}"
+                a href="/reports/my"
+                  b
+                    ==env['warden'].user.username
+              li
+                form role="form" action="/auth/logout" method="POST"
+                  button.btn-link.logout type="submit" Log out
     .container
       == yield
