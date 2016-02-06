@@ -1,8 +1,8 @@
 storage_type: data_mapper_storage # pg_database json
-#storage_type: pg_database #json
 max_url_info: 255
-main_page_limit: 10
+per_page_default: 10
 time_format: '%d.%m.%Y %H:%M:%S'
+geoIP_file: './lib/controler/GeoIP.dat'
 json:
   base_dir: './public/reports/'
 postgres:

@@ -9,13 +9,11 @@ require './lib/export/storage_factory'
 module App
 #Send Get request to url, and parse it
   class RequestWorker
-    GEO_IP_FILE = './lib/controler/GeoIP.dat'
-
     def get_info(url, user_id)
       _url_copy = url_normalisation(url)
       _response = send_request(_url_copy)
-      _geo = GeoIP.new(GEO_IP_FILE).country(domain_name(url))
-      _headers = Hash.new()
+      _geo = GeoIP.new(App::Configuration.instance.geoIP_file).country(domain_name(url))
+      _headers = Hash.new
       _response.headers.each { |key, value| _headers[cut_string(key)] = cut_string(value) }
       _info = SiteInfo.new(cut_string(_url_copy), _headers, _geo.ip, _geo.country_name, Time.now, user_id)
       parse_links(_response.body, _info)
@@ -34,12 +32,16 @@ module App
       _url_copy
     end
 
-    def get_reports_list(page, per_page, user_id = nil)
+    def get_reports_list(page, per_page, user_id)
       StorageFactory.new.get_connector.all_reports(page, per_page, user_id)
     end
 
     def get_report(file_id)
       StorageFactory.new.get_connector.find_report(file_id)
+    end
+
+    def destroy_report(report_id, user_id)
+      StorageFactory.new.get_connector.destroy_report(report_id, user_id)
     end
 
     private

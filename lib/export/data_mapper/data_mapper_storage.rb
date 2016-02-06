@@ -25,8 +25,7 @@ module DataMapperExport
     end
 
     def add_report(report)
-      _params = {url: report.url.force_encoding("UTF-8"), title: report.title.force_encoding("UTF-8"), country: report.country.force_encoding("UTF-8"), date: report.date, ip: report.ip, user_id: report.user_id}
-      _report = Report.new(_params)
+      _report = Report.new(url: report.url.force_encoding("UTF-8"), title: report.title.force_encoding("UTF-8"), country: report.country.force_encoding("UTF-8"), date: report.date, ip: report.ip, user_id: report.user_id)
       if _report.save
         _id = _report.id
         report.headers.each { |r_key, r_value| Header.new(:h_key => r_key, :value => r_value, :report_id => _id).save }
@@ -38,20 +37,25 @@ module DataMapperExport
       _headers = Hash.new
       _report = Report.first(id: report_id)
       Header.all(report_id: report_id).each { |h| _headers[h[:h_key]] =h[:value] }
-      _result = SiteInfo.new(_report.url, _headers, _report.ip.to_s, _report.country, _report.date)
+      _result = SiteInfo.new(_report.url, _headers, _report.ip.to_s, _report.country, _report.date, _report.user_id)
       _result.title = _report.title
       Link.all(report_id: report_id).each { |link| _result.add_link(link.name, link.url, link.rel, link.target) }
       _result
     end
 
+    def destroy_report(report_id, user_id)
+      _report = Report.first(id: report_id, user_id: user_id)
+      _report.destroy unless _report.nil?
+    end
+
     def password_auth(username, password)
       _db_user = User.first(username: username, password: password)
-      ::User.new(_db_user.id, username, password)
+      ::User.new(_db_user.id, username, password) unless _db_user.nil?
     end
 
     def get_user_by_id(id)
       _db_user = User.first(id: id)
-      ::User.new(id, _db_user.username, _db_user.password)
+      ::User.new(id, _db_user.username, _db_user.password) unless _db_user.nil?
     end
   end
 end

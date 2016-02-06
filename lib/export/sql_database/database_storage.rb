@@ -28,9 +28,8 @@ module SQLExport
     end
 
     def all_reports(page, per_page, user_id)
-      _query = 'SELECT id, url, date FROM reports'
-      _query << " WHERE user_id = #{user_id}" unless user_id.nil?
-      _query << " ORDER BY date DESC LIMIT #{per_page}"
+      _id = user_id.nil? ? "IS NULL" : "= #{user_id}"
+      _query = "SELECT id, url, date FROM reports WHERE user_id #{_id} ORDER BY date DESC LIMIT #{per_page}"
       _query << " OFFSET #{per_page * (page - 1)}" if page > 1
       _report_list = []
       @connector.exec(_query).each { |res| _report_list << ResultList.new(res["url"], res["date"], res["id"]) }
@@ -38,12 +37,12 @@ module SQLExport
     end
 
     def find_report(id)
-      _headers = Hash.new
       _result = nil
       @connector.exec('SELECT * FROM reports WHERE id = $1 LIMIT 1', [id]).each do |res|
         _buf_headers = @connector.exec("SELECT * from headers where report_id = $1::int", [id])
+        _headers = Hash.new
         _buf_headers.each { |h| _headers[h['h_key']] = h['value'] }
-        _result = SiteInfo.new(res["url"], _headers, res["ip"].to_s, res["country"], res["date"])
+        _result = SiteInfo.new(res["url"], _headers, res["ip"].to_s, res["country"], res["date"], res["user_id"])
         _buf_links = @connector.exec("SELECT * from links where report_id = $1::int", [res['id']])
         _buf_links.each { |link| _result.add_link(link["name"], link["url"], link["rel"], link["target"]) }
         _result.title = res["title"]
@@ -65,6 +64,10 @@ module SQLExport
         _user = User.new(id, res['username'], res['password'])
       end
       _user
+    end
+
+    def destroy_report(report_id, user_id)
+      @connector.exec('DELETE FROM reports WHERE id = $1 AND user_id = $2', [report_id, user_id])
     end
   end
 end
