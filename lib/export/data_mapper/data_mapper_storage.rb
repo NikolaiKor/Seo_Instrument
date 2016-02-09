@@ -6,7 +6,7 @@ require './lib/model/result_list'
 require_relative 'link'
 require_relative 'user'
 require './lib/model/user'
-
+require './lib/controller/no_report_error'
 module DataMapperExport
   class DataMapperStorage
     def initialize
@@ -34,8 +34,9 @@ module DataMapperExport
     end
 
     def find_report(report_id)
-      _headers = Hash.new
       _report = Report.first(id: report_id)
+      raise App::NoReportError.new('no report') if _report.nil?
+      _headers = Hash.new
       Header.all(report_id: report_id).each { |h| _headers[h[:h_key]] =h[:value] }
       _result = SiteInfo.new(_report.url, _headers, _report.ip.to_s, _report.country, _report.date, _report.user_id)
       _result.title = _report.title

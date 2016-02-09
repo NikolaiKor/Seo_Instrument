@@ -8,14 +8,14 @@ module JsonExport
     def all_reports(page, per_page, user_id)
       _files_info = []
       Dir.foreach(App::Configuration.instance.json['base_dir']) do |filename|
-        unless filename=='.' || filename=='..'
+        unless filename=='.' || filename=='..' || !filename.end_with?(FILE_FORMAT)
           _url, _time = filename.split('_')
           _time.slice!(FILE_FORMAT)
           _files_info << ResultList.new(_url, DateTime.parse(_time), filename)
         end
       end
       _files_info.sort! { |a, b| b.time <=> a.time }
-      _files_info = _files_info[page * (per_page - 1), per_page]
+      _files_info = _files_info[per_page * (page - 1), per_page]
       {res_length: _files_info.length, res: _files_info}
     end
 
@@ -33,7 +33,9 @@ module JsonExport
     end
 
     def find_report(file_name)
-      File.open(App::Configuration.instance.json['base_dir'] + file_name, 'r') { |f| JSON.load(f.read) }
+      _file_path = App::Configuration.instance.json['base_dir'] + file_name
+      raise App::NoReportError.new('no report') unless File.exist?(_file_path)
+      File.open(_file_path, 'r') { |f| JSON.load(f.read) }
     end
 
     def password_auth(username, password)
