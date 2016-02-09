@@ -1,6 +1,5 @@
 require 'sinatra'
-require_relative 'controler/request_worker'
-require_relative 'controler/files_manager'
+require_relative 'controller/request_worker'
 require 'json'
 require_relative 'helpers'
 
@@ -24,9 +23,13 @@ module App
     end
 
     get '/reports/show' do
-      _report = RequestWorker.new.get_report(@params['file'])
-      @title = "#{_report.url} report in Seo Instrument"
-      slim :report, locals: {res: _report}
+      begin
+        _report = RequestWorker.new.get_report(@params['file'])
+        @title = "#{_report.url} report in Seo Instrument"
+        slim :report, locals: {res: _report}
+      rescue NoReportError
+        redirect '/'
+      end
     end
 
     post '/reports/destroy' do
@@ -41,7 +44,12 @@ module App
     end
 
     post '/reports/new' do
-      slim :report, locals: {res: RequestWorker.new.get_info(@params['url'], current_user_id)}
+      redirect '/' if @params['url'] == ''
+      begin
+        slim :report, locals: {res: RequestWorker.new.get_info(@params['url'], current_user_id)}
+      rescue SocketError
+        redirect '/'
+      end
     end
 
     get '/auth/login' do

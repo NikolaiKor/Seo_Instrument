@@ -3,7 +3,7 @@
     .site-form-wrapper
       form role="form" action="/reports/new" method="POST"
         .input-group
-          input.form-control type="text" autofocus='' name="url" placeholder ="Enter url"
+          input.form-control type="text" autofocus='' required='' name="url" placeholder ="Enter url"
           span.input-group-btn
             button.btn.btn-success type="submit" Run
   .col-sm-12
@@ -23,7 +23,7 @@
           -unless res_length == 0
             -res.each do |item|
               tr
-                td: a href="http://#{item.url}" =item.url
+                td: a href="#{item.url}" =item.url
                 td =item.time.strftime(App::Configuration.instance.time_format)
                 td
                   a.btn.btn-info.btn-xs href="/reports/show?file=#{item.view}" View

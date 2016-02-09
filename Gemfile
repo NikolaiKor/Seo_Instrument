@@ -16,11 +16,10 @@ gem 'dm-postgres-adapter'
 gem 'warden'
 
 group :test do
-  #gem 'rspec', '~> 2.7.0'
+  %w[rspec rspec-core rspec-expectations rspec-mocks rspec-support].each do |lib|
+    gem lib, :git => "git://github.com/rspec/#{lib}.git", :branch => 'master'
+  end
   gem 'rack-test', '~> 0.6.0'
   gem 'fakeweb', '~> 1.3'
-end
-
-%w[rspec rspec-core rspec-expectations rspec-mocks rspec-support].each do |lib|
-  gem lib, :git => "git://github.com/rspec/#{lib}.git", :branch => 'master'
+  gem 'database_cleaner'
 end

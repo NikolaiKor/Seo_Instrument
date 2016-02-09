@@ -10,16 +10,8 @@ module App
 #Send Get request to url, and parse it
   class RequestWorker
     def get_info(url, user_id)
-      _url_copy = url_normalisation(url)
-      _response = send_request(_url_copy)
-      _geo = GeoIP.new(App::Configuration.instance.geoIP_file).country(domain_name(url))
-      _headers = Hash.new
-      _response.headers.each { |key, value| _headers[cut_string(key)] = cut_string(value) }
-      _info = SiteInfo.new(cut_string(_url_copy), _headers, _geo.ip, _geo.country_name, Time.now, user_id)
-      parse_links(_response.body, _info)
-      set_title(_response.body, _info)
-      _info.identifier = "#{_info.domain}_#{_info.date.strftime(Configuration.instance.time_format)}"
-      StorageFactory.new.get_connector.add_report(_info)
+      _info = create_report(url, user_id)
+      save_report(_info)
       _info
     end
 
@@ -45,6 +37,23 @@ module App
     end
 
     private
+
+    def create_report(url, user_id)
+      _url_copy = url_normalisation(url)
+      _response = send_request(_url_copy)
+      _geo = GeoIP.new(App::Configuration.instance.geoIP_file).country(domain_name(url))
+      _headers = Hash.new
+      _response.headers.each { |key, value| _headers[cut_string(key)] = cut_string(value) }
+      _info = SiteInfo.new(cut_string(_url_copy), _headers, _geo.ip, _geo.country_name, Time.now, user_id)
+      parse_links(_response.body, _info)
+      set_title(_response.body, _info)
+      _info.identifier = "#{_info.domain}_#{_info.date.strftime(Configuration.instance.time_format)}"
+      _info
+    end
+
+    def save_report(_info)
+      StorageFactory.new.get_connector.add_report(_info)
+    end
 
     def url_normalisation(url)
       _url_copy = url.clone

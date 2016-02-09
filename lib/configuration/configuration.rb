@@ -1,17 +1,23 @@
 require 'yaml'
-require 'singleton'
 
 module App
   class Configuration
     BASE_DIR = './config/'
 
-    include Singleton
+    def self.instance
+      @@instance ||= new
+    end
 
-    def load(file_name = 'configuration.yaml')
+    def load_config(file_name = 'configuration.yaml')
       YAML.load_file(BASE_DIR + file_name).each do |key, val|
         self.instance_variable_set("@#{key}", val)
         singleton_class.class_eval { attr_reader key.to_sym }
       end
+    end
+
+    private
+    def initialize
+      load_config
     end
   end
 end
